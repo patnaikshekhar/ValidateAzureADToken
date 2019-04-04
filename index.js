@@ -25,8 +25,6 @@ app.get('/callback', async (req, res) => {
             }
         })
 
-        console.log('Response from AD', response)
-
         const respJson = JSON.parse(response)
         const id_token = respJson.id_token
 
@@ -49,14 +47,12 @@ function getKey(header, callback) {
         } else {
             const signingKey = key.publicKey || key.rsaPublicKey;
             console.log('signingKey', signingKey)
-            require('fs').writeFileSync('sampleFile.pem', signingKey)
             callback(null, signingKey)
         }
     })
 }
 
 function verifyToken(token) {
-    console.log('Validating JWT for', token)
     return new Promise((resolve, reject) => {
         jwt.verify(token, getKey, {}, function(err, decoded) {
             if (err) {
